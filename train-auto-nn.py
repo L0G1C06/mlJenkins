@@ -1,7 +1,3 @@
-import platform
-import sys
-import scipy
-
 import os
 import numpy as np
 from sklearn.neural_network import MLPClassifier
@@ -14,8 +10,8 @@ def train():
 
     # Load directory paths for persisting model
 
-    MODEL_DIR = os.environ["MODEL_DIR"]
-    MODEL_FILE_NN = os.environ["MODEL_FILE_NN"]
+    MODEL_DIR = "./my_model/"
+    MODEL_FILE_NN = "clf_nn.joblib"
     MODEL_PATH_NN = os.path.join(MODEL_DIR, MODEL_FILE_NN)
 
     # Load, read and normalize training data
