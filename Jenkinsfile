@@ -13,5 +13,17 @@ pipeline {
       }
     }
 
+    stage('Build') {
+      steps {
+        sh 'pip install -r requirements.txt'
+      }
+    }
+
+    stage('Train') {
+      steps {
+        sh 'python3 train-lda.py'
+      }
+    }
+
   }
 }
