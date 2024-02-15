@@ -10,12 +10,12 @@ def train():
 
     # Load directory paths for persisting model
 
-    MODEL_DIR = "./my_model/"
+    MODEL_DIR = "./my-model/"
     MODEL_FILE_NN = "clf_nn.joblib"
     MODEL_PATH_NN = os.path.join(MODEL_DIR, MODEL_FILE_NN)
 
     # Load, read and normalize training data
-    training = "./train.csv"
+    training = "./data/train.csv"
     data_train = pd.read_csv(training)
 
     y_train = data_train['# Letter'].values
@@ -27,7 +27,7 @@ def train():
     # Models training
 
     # Load, read and normalize training data
-    testing = "test.csv"
+    testing = "./data/test.csv"
     data_test = pd.read_csv(testing)
 
     y_test = data_test['# Letter'].values

@@ -8,7 +8,7 @@ def train():
 
     # Load directory paths for persisting model
 
-    MODEL_DIR = "./my_model/"
+    MODEL_DIR = "./my-model/"
     MODEL_FILE_LDA = "clf_lda.joblib"
     MODEL_PATH_LDA = os.path.join(MODEL_DIR, MODEL_FILE_LDA)
 
