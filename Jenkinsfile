@@ -31,7 +31,7 @@ pipeline {
             sh 'docker build -f Dockerfile . -t l0g1g06/mljenkins:latest'
             sh 'docker push l0g1g06/mljenkins:latest'
           } else {
-            discordSend(message: 'O modelo tem uma precisão menor que 65%')
+            discordSend(message: 'O modelo tem uma precisão menor que 62%')
           }
         }
       }
