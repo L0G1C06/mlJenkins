@@ -22,9 +22,5 @@ async def download_model():
     }
     return StreamingResponse(iter([content]), status_code=200, headers=headers, media_type="application/octet-stream")
 
-@app.get("/download/code")
-async def download_code():
-    pass 
-
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000)
