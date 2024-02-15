@@ -30,6 +30,7 @@ pipeline {
           if (precision.toFloat() > 62) {
             sh 'docker build -f Dockerfile . -t l0g1g06/mljenkins:latest'
             sh 'docker push l0g1g06/mljenkins:latest'
+            discordSend(message: 'Link do container para deploy: https://hub.docker.com/repository/docker/l0g1g06/mljenkins/general')
           } else {
             discordSend(message: 'O modelo tem uma precisão menor que 62%')
           }
