@@ -7,8 +7,9 @@ def test():
     MODEL_DIR = "./my_model/"
     MODEL_FILE_LDA = "clf_lda.joblib"
     MODEL_PATH_LDA = os.path.join(MODEL_DIR, MODEL_FILE_LDA)
+    RESULT_FILE = "result.txt"
 
-    testing = "test.csv"
+    testing = "./data/test.csv"
     data_test = pd.read_csv(testing)
     y_test = data_test['# Letter'].values
     X_test = data_test.drop(data_test.loc[:, 'Line':'# Letter'].columns, axis = 1)
@@ -18,7 +19,9 @@ def test():
     clf_lda = load(MODEL_PATH_LDA)
 
     score = int(clf_lda.score(X_test, y_test)*100)
-    print(f"Precision: {score}%")
+    with open(RESULT_FILE, 'w') as file:
+        file.write(str(score))
+    print(score)
 
 if __name__ == "__main__":
     test()

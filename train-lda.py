@@ -13,7 +13,7 @@ def train():
     MODEL_PATH_LDA = os.path.join(MODEL_DIR, MODEL_FILE_LDA)
 
     # Load, read and normalize training data
-    training = "./train.csv"
+    training = "./data/train.csv"
     data_train = pd.read_csv(training)
 
     y_train = data_train['# Letter'].values
