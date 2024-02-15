@@ -1,7 +1,9 @@
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 import uvicorn 
 
 app = FastAPI()
+model_file_path = "model.txt"
 
 @app.get("/")
 async def read_root():
@@ -9,7 +11,7 @@ async def read_root():
 
 @app.get("/download/model")
 async def download_model():
-    pass 
+    return FileResponse(path=model_file_path, filename=model_file_path, media_type="text/plain") 
 
 @app.get("/download/code")
 async def download_code():
