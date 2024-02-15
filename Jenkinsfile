@@ -29,7 +29,7 @@ pipeline {
           def precision = sh(script: 'python3 test-lda.py', returnStdout: true).trim()
           if (precision.toFloat() > 62) {
             sh 'docker build -f Dockerfile . -t l0g1g06/mljenkins:latest'
-            sh 'docker push l0g1g06/simple_api_jenkins:latest'
+            sh 'docker push l0g1g06/mljenkins:latest'
           } else {
             discordSend(message: 'O modelo tem uma precisão menor que 65%')
           }
