@@ -1,8 +1,7 @@
 import os
-import numpy as np
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import pandas as pd
-from joblib import dump, load
+from joblib import dump
 from sklearn import preprocessing
 
 def train():
@@ -32,20 +31,7 @@ def train():
     # Serialize model
     dump(clf_lda, MODEL_PATH_LDA)
 
-    # Load, read and normalize testing data
-    testing = "test.csv"
-    data_test = pd.read_csv(testing)
-
-    y_test = data_test['# Letter'].values
-    X_test = data_test.drop(data_test.loc[:, 'Line':'# Letter'].columns, axis = 1)
-
-    # Data normalization (0,1)
-    X_test = preprocessing.normalize(X_test, norm='l2')
-
-    # load and Run model
-    clf_lda = load(MODEL_PATH_LDA)
-    
-    print(int(clf_lda.score(X_test, y_test)*100))
+    print(f"Model trained and saved on {MODEL_PATH_LDA}")
 
 if __name__ == '__main__':
     train()
