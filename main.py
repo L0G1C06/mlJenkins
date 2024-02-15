@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi.responses import StreamingResponse
 import uvicorn 
 
 app = FastAPI()
-model_file_path = "model.txt"
+model_file_path = "./staging_models/clf_lda.joblib"
 
 @app.get("/")
 async def read_root():
@@ -11,7 +11,16 @@ async def read_root():
 
 @app.get("/download/model")
 async def download_model():
-    return FileResponse(path=model_file_path, filename=model_file_path, media_type="text/plain") 
+    try:
+        with open(model_file_path, "rb") as file:
+            content = file.read()
+    except FileNotFoundError:
+        return {"error": "File not found"}
+    
+    headers = {
+        "Content-Disposition": f"attachment; filename={model_file_path}"
+    }
+    return StreamingResponse(iter([content]), status_code=200, headers=headers, media_type="application/octet-stream")
 
 @app.get("/download/code")
 async def download_code():
