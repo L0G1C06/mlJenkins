@@ -6,19 +6,16 @@ pipeline {
         git(url: 'https://github.com/L0G1C06/mlJenkins', branch: 'feat-model')
       }
     }
-
     stage('Build') {
       steps {
         sh 'pip install -r requirements.txt'
       }
     }
-
     stage('Train') {
       steps {
         sh 'python3 train-lda.py'
       }
     }
-
     stage('Docker Login') {
       steps {
         withCredentials(bindings: [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DockerHub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]) {
@@ -27,16 +24,19 @@ pipeline {
 
       }
     }
-
-    stage('Deploy') {
+    stage('Deploy App') {
       steps {
         script {
           def precision = sh(script: 'python3 test-lda.py', returnStdout: true).trim()
           if (precision.toInteger() > 62) {
-            sh 'docker build -f Dockerfile . -t l0g1g06/mljenkins:latest'
-            sh 'docker push l0g1g06/mljenkins:latest'
-            discordSend description: "Link para o novo container para deploy:",
-            footer: "https://hub.docker.com/repository/docker/l0g1g06/mljenkins/general",
+            sh 'docker build -f Dockerfile . -t l0g1g06/mljenkins-inference:latest'
+            sh 'docker push l0g1g06/mljenkins-inference:latest'
+            sh 'tofu init'
+            sh 'tofu plan'
+            def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
+            sh 'tofu apply -input=true'
+            discordSend description: "Link Live App:",
+            footer: "http://0.0.0.0:8001/docs",
             link: env.BUILD_URL,
             result: currentBuild.currentResult,
             title: JOB_NAME,
@@ -51,9 +51,7 @@ pipeline {
             sh 'python3 send-model-staging.py'
           }
         }
-
       }
     }
-
   }
 }
