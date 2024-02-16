@@ -4,3 +4,6 @@ scikit-learn
 joblib
 pandas
 requests 
+python-multipart
+fastapi
+uvicorn 
