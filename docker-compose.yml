@@ -4,7 +4,3 @@ services:
     image: 'l0g1g06/mljenkins-staging:latest'
     ports:
       - '8000:8000'
-  inference-api:
-    image: 'l0g1g06/mljenkins-inference:latest'
-    ports:
-      - '8001:8001'
