@@ -6,6 +6,8 @@ COPY ./requirements.txt /code/requirements.txt
 
 RUN pip install -r /code/requirements.txt 
 
-COPY . /code/app 
+COPY . /code/app
+
+EXPOSE 8001
 
 CMD ["python3", "app/main.py"]
