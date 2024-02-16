@@ -28,7 +28,7 @@ async def read_root():
 async def run_inference(testFile: UploadFile = File(...)):
     try:
         testContent = await testFile.read()
-        score = exec_inference(modelFile="./my-model/clf_lda.joblib", testFile=io.BytesIO(testContent))
+        score = exec_inference(modelFile="/code/app/my-model/clf_lda.joblib", testFile=io.BytesIO(testContent))
         return JSONResponse(content={"message": f"Result: {score}%"}, status_code=200) 
     except Exception as e:
         return JSONResponse(content={"error": "Internal Server Error", "error": str(e)}, status_code=500)
