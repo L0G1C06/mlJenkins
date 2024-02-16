@@ -6,16 +6,19 @@ pipeline {
         git(url: 'https://github.com/L0G1C06/mlJenkins', branch: 'feat-model')
       }
     }
+
     stage('Build') {
       steps {
         sh 'pip install -r requirements.txt'
       }
     }
+
     stage('Train') {
       steps {
         sh 'python3 train-lda.py'
       }
     }
+
     stage('Docker Login') {
       steps {
         withCredentials(bindings: [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DockerHub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]) {
@@ -24,6 +27,7 @@ pipeline {
 
       }
     }
+
     stage('Deploy App') {
       steps {
         script {
@@ -51,7 +55,9 @@ pipeline {
             sh 'python3 send-model-staging.py'
           }
         }
+
       }
     }
+
   }
 }
