@@ -27,7 +27,7 @@ pipeline {
       steps {
         script {
           def precision = sh(script: 'python3 test-lda.py', returnStdout: true).trim()
-          if (precision.toInteger() > 90) {
+          if (precision.toInteger() > 62) {
             sh 'docker build -f Dockerfile . -t l0g1g06/mljenkins:latest'
             sh 'docker push l0g1g06/mljenkins:latest'
             discordSend description: "Link para o novo container para deploy:", 
