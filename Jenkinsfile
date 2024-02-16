@@ -33,8 +33,8 @@ pipeline {
             sh 'docker push l0g1g06/mljenkins-inference:latest'
             sh 'tofu init'
             sh 'tofu plan'
-            def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: true, description: 'Apply terraform', name: 'confirm'] ])
-            sh 'tofu apply'
+            def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
+            sh 'tofu apply -auto-approve'
             discordSend description: "Link Live App:",
             footer: "http://0.0.0.0:8001/docs",
             link: env.BUILD_URL,
