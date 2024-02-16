@@ -27,12 +27,22 @@ pipeline {
       steps {
         script {
           def precision = sh(script: 'python3 test-lda.py', returnStdout: true).trim()
-          if (precision.toFloat() > 62) {
+          if (precision.toInteger() > 90) {
             sh 'docker build -f Dockerfile . -t l0g1g06/mljenkins:latest'
             sh 'docker push l0g1g06/mljenkins:latest'
-            discordSend description: "Link para o novo container para deploy:", footer: "https://hub.docker.com/repository/docker/l0g1g06/mljenkins/general", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "https://discord.com/api/webhooks/1207777679592394793/k0KTnD2qSX1N8-upTPvvNf3_RnDZ5fZdIhQtWSlU4zSvHrPFxmtP-SzjDeQbitGSRZes"
+            discordSend description: "Link para o novo container para deploy:", 
+              footer: "https://hub.docker.com/repository/docker/l0g1g06/mljenkins/general", 
+              link: env.BUILD_URL, 
+              result: currentBuild.currentResult, 
+              title: JOB_NAME, 
+              webhookURL: "https://discord.com/api/webhooks/1207777679592394793/k0KTnD2qSX1N8-upTPvvNf3_RnDZ5fZdIhQtWSlU4zSvHrPFxmtP-SzjDeQbitGSRZes"
           } else {
-            discordSend(message: 'O modelo tem uma precisão menor que 62%')
+            discordSend description: "Falha ao buildar:", 
+              footer: "O modelo tem uma precisão menor que 62%", 
+              link: env.BUILD_URL, 
+              result: currentBuild.currentResult, 
+              title: JOB_NAME, 
+              webhookURL: "https://discord.com/api/webhooks/1207777679592394793/k0KTnD2qSX1N8-upTPvvNf3_RnDZ5fZdIhQtWSlU4zSvHrPFxmtP-SzjDeQbitGSRZes"
           }
         }
       }
