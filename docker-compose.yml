@@ -1,0 +1,6 @@
+version: '3'
+services:
+  app:
+    image: 'l0g1g06/mljenkins-staging:latest'
+    ports:
+      - '8000:8000'
