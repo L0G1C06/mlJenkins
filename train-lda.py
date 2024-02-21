@@ -5,7 +5,7 @@ from joblib import dump
 from sklearn import preprocessing
 import argparse
 
-from versioning import model 
+from versioning import model, data
 
 # Load directory paths for persisting model
 
@@ -41,10 +41,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Create a new version of the model with specified hyperparameters.')
     parser.add_argument('--model_dir', type=str, default=MODEL_DIR, help='Path to the model directory')
     parser.add_argument('--creator', type=str, default='', help='Name of model developer')
-    parser.add_argument('--data_used', type=str, default='./data/train.csv')
+    parser.add_argument('--data_used', type=str, default='./data/')
     parser.add_argument('--epochs', type=int, default=0, help='Number of epochs')
     parser.add_argument('--learning_rate', type=float, default=0.0, help='Learning rate')
     parser.add_argument('--optimizer', type=str, default='', help='Optimizer used for training')
     args = parser.parse_args()
     metadata = {}
-    version_hash = model.create_model_version(metadata, model_dir=args.model_dir, data_used=args.data_used, creator=args.creator, epochs=args.epochs, learning_rate=args.learning_rate, optimizer=args.optimizer)
+    data_version_hash = data.create_dataset_version(metadata, data_dir=args.data_used)
+    model_version_hash = model.create_model_version(metadata, model_dir=args.model_dir, data_used=data_version_hash, creator=args.creator, epochs=args.epochs, learning_rate=args.learning_rate, optimizer=args.optimizer)
