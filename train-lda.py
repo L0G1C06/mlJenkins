@@ -3,14 +3,17 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import pandas as pd
 from joblib import dump
 from sklearn import preprocessing
+import argparse
+
+from versioning import model 
+
+# Load directory paths for persisting model
+
+MODEL_DIR = "./my-model/"
+MODEL_FILE_LDA = "clf_lda.joblib"
+MODEL_PATH_LDA = os.path.join(MODEL_DIR, MODEL_FILE_LDA)
 
 def train():
-
-    # Load directory paths for persisting model
-
-    MODEL_DIR = "./my-model/"
-    MODEL_FILE_LDA = "clf_lda.joblib"
-    MODEL_PATH_LDA = os.path.join(MODEL_DIR, MODEL_FILE_LDA)
 
     # Load, read and normalize training data
     training = "./data/train.csv"
@@ -35,3 +38,13 @@ def train():
 
 if __name__ == '__main__':
     train()
+    parser = argparse.ArgumentParser(description='Create a new version of the model with specified hyperparameters.')
+    parser.add_argument('--model_dir', type=str, default=MODEL_DIR, help='Path to the model directory')
+    parser.add_argument('--creator', type=str, default='', help='Name of model developer')
+    parser.add_argument('--data_used', type=str, default='./data/train.csv')
+    parser.add_argument('--epochs', type=int, default=0, help='Number of epochs')
+    parser.add_argument('--learning_rate', type=float, default=0.0, help='Learning rate')
+    parser.add_argument('--optimizer', type=str, default='', help='Optimizer used for training')
+    args = parser.parse_args()
+    metadata = {}
+    version_hash = model.create_model_version(metadata, model_dir=args.model_dir, data_used=args.data_used, creator=args.creator, epochs=args.epochs, learning_rate=args.learning_rate, optimizer=args.optimizer)
