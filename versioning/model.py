@@ -2,8 +2,8 @@ import os
 import shutil 
 import json 
 import hashlib 
+import subprocess
 from datetime import datetime 
-
 
 def calculate_directory_hash(directory_path):
     hash_object = hashlib.sha256()
@@ -15,6 +15,16 @@ def calculate_directory_hash(directory_path):
                     hash_object.update(chunk)
                 hash_object.update(str(os.path.getmtime(file_path)).encode())  # Include modification time in hash
     return hash_object.hexdigest()
+
+def get_installed_libraries():
+    # Use pip to list installed packages and versions
+    result = subprocess.run(['pip', 'freeze'], stdout=subprocess.PIPE, text=True)
+    installed_packages = result.stdout.strip().split('\n')
+    libraries = {}
+    for package in installed_packages:
+        name, version = package.split('==')
+        libraries[name] = version
+    return libraries
 
 def create_model_version(metadata, model_dir = './my-model/', data_used = None, creator = None, epochs = None, learning_rate = None, optimizer = None):
     # Calculate hash of the model file
@@ -31,10 +41,11 @@ def create_model_version(metadata, model_dir = './my-model/', data_used = None, 
     metadata['creator'] = creator
     metadata['dataset_used'] = data_used
     metadata['hyperparameters'] = {'epochs': epochs, 'learning_rate': learning_rate, 'optimizer': optimizer}
+    metadata['environment'] = get_installed_libraries()
 
     # Save metadata to a JSON file
     with open(os.path.join(version_dir, 'metadata.json'), 'w') as metadata_file:
-        json.dump(metadata, metadata_file)
+        json.dump(metadata, metadata_file, indent=2, separators=(',', ': '))
 
     return model_hash
 
