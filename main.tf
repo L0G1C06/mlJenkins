@@ -16,6 +16,7 @@ resource "docker_image" "mljenkins-inference"{
 
 resource "docker_container" "mljenkins-inference"{
     image = docker_image.mljenkins-inference.image_id
+    name = "api-inference"
 
     ports {
         internal = 8001
