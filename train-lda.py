@@ -54,9 +54,7 @@ if __name__ == '__main__':
         exit()
     if data_version_hash == previous_data_version_hash:
         model_version_hash = model.create_model_version(metadata, model_dir=args.model_dir, data_used=previous_data_version_hash, creator=args.creator, epochs=args.epochs, learning_rate=args.learning_rate, optimizer=args.optimizer)
-        print(model_version_hash)
         save_hash = model.save_hash_on_file(model_version_hash)
     else:
         model_version_hash = model.create_model_version(metadata, model_dir=args.model_dir, data_used=data_version_hash, creator=args.creator, epochs=args.epochs, learning_rate=args.learning_rate, optimizer=args.optimizer)
-        print(model_version_hash)
         save_hash = model.save_hash_on_file(model_version_hash)

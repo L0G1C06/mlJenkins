@@ -28,6 +28,14 @@ pipeline {
       }
     }
 
+    stage('API Staging') {
+      steps{
+        script{
+          sh ''
+        }
+      }
+    }
+
     stage('Deploy App') {
       steps {
         script {
