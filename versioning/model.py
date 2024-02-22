@@ -55,3 +55,13 @@ def get_model_version(version_hash):
         return version_dir
     else:
         return None
+    
+def save_hash_on_file(hash_to_insert):
+    existing_hashes = []
+    if os.path.exists("model_hashes.txt"):
+        with open("model_hashes.txt", "r") as f:
+            existing_hashes = f.readlines()
+
+    existing_hashes.insert(0, hash_to_insert + "\n")
+    with open("model_hashes.txt", "w") as f:
+        f.writelines(existing_hashes)

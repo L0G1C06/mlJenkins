@@ -2,7 +2,9 @@ import os
 import shutil 
 import json 
 import hashlib 
-from datetime import datetime
+from datetime import datetime 
+
+from .database import retrieve_hash, insert_hash
 
 def calculate_dir_hash(dir_path):
     hash_object = hashlib.sha256()
@@ -15,11 +17,20 @@ def calculate_dir_hash(dir_path):
                 hash_object.update(str(os.path.getmtime(file_path)).encode())  # Include modification time in hash
     return hash_object.hexdigest()
 
-def create_dataset_version(metadata, data_dir = './data/'):
+def create_dataset_version(metadata, data_dir='./data/'):
     # Calculate hash of the model file
-    model_hash = calculate_dir_hash(data_dir)
+    data_hash = calculate_dir_hash(data_dir)
     
-    version_dir = os.path.join('data_versioning', model_hash)
+    # Check if data hash already exists in the database
+    existing_data_hash = retrieve_hash('data_version_hash', 'data_hash')
+    if existing_data_hash == data_hash:
+        return existing_data_hash
+    
+    # Save data hash to the database
+    insert_hash('data_version_hash', data_hash, 'data_hash')
+    
+    # Create version directory if it doesn't exist
+    version_dir = os.path.join('data_versioning', data_hash)
     os.makedirs(version_dir, exist_ok=True)
 
     # Copy model files to version directory
@@ -32,7 +43,7 @@ def create_dataset_version(metadata, data_dir = './data/'):
     with open(os.path.join(version_dir, 'metadata.json'), 'w') as metadata_file:
         json.dump(metadata, metadata_file)
 
-    return model_hash
+    return data_hash
 
 def get_data_version(version_hash):
     version_dir = os.path.join('data_versioning', version_hash)
