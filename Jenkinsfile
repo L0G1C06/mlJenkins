@@ -46,6 +46,12 @@ pipeline {
             result: currentBuild.currentResult,
             title: JOB_NAME,
             webhookURL: "https://discord.com/api/webhooks/1207777679592394793/k0KTnD2qSX1N8-upTPvvNf3_RnDZ5fZdIhQtWSlU4zSvHrPFxmtP-SzjDeQbitGSRZes"
+            discordSend description: "Model Hash:",
+            footer: modelHash,
+            link: env.BUILD_URL,
+            result: currentBuild.currentResult,
+            title: JOB_NAME,
+            webhookURL: "https://discord.com/api/webhooks/1207777679592394793/k0KTnD2qSX1N8-upTPvvNf3_RnDZ5fZdIhQtWSlU4zSvHrPFxmtP-SzjDeQbitGSRZes"
           } else {
             discordSend description: "Falha ao buildar:",
             footer: "O modelo tem uma precisão menor que a desejada. Link download modelo: http://0.0.0.0:8000/download/model",
