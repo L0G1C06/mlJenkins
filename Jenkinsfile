@@ -44,7 +44,7 @@ pipeline {
             footer: "http://0.0.0.0:8001/docs",
             link: "http://0.0.0.0:8001/docs",
             result: currentBuild.currentResult,
-            title: modelHash,
+            title: JOB_NAME,
             webhookURL: "https://discord.com/api/webhooks/1207777679592394793/k0KTnD2qSX1N8-upTPvvNf3_RnDZ5fZdIhQtWSlU4zSvHrPFxmtP-SzjDeQbitGSRZes"
           } else {
             discordSend description: "Falha ao buildar:",
