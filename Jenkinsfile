@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git(url: 'https://github.com/L0G1C06/mlJenkins', branch: 'feat-model')
+        git(url: 'https://github.com/L0G1C06/mlJenkins', branch: 'feat-model', credentialsId: 'github-credentials')
       }
     }
 
@@ -41,18 +41,18 @@ pipeline {
             def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
             sh 'tofu apply -auto-approve'
             discordSend description: "Link Live App:",
-                    footer: "http://0.0.0.0:8001/docs",
-                    link: "http://0.0.0.0:8001/docs",
-                    result: currentBuild.currentResult,
-                    title: modelHash,
-                    webhookURL: "https://discord.com/api/webhooks/1207777679592394793/k0KTnD2qSX1N8-upTPvvNf3_RnDZ5fZdIhQtWSlU4zSvHrPFxmtP-SzjDeQbitGSRZes"
+            footer: "http://0.0.0.0:8001/docs",
+            link: "http://0.0.0.0:8001/docs",
+            result: currentBuild.currentResult,
+            title: modelHash,
+            webhookURL: "https://discord.com/api/webhooks/1207777679592394793/k0KTnD2qSX1N8-upTPvvNf3_RnDZ5fZdIhQtWSlU4zSvHrPFxmtP-SzjDeQbitGSRZes"
           } else {
             discordSend description: "Falha ao buildar:",
-                    footer: "O modelo tem uma precisão menor que a desejada. Link download modelo: http://0.0.0.0:8000/download/model",
-                    link: env.BUILD_URL,
-                    result: currentBuild.currentResult,
-                    title: JOB_NAME,
-                    webhookURL: "https://discord.com/api/webhooks/1207777679592394793/k0KTnD2qSX1N8-upTPvvNf3_RnDZ5fZdIhQtWSlU4zSvHrPFxmtP-SzjDeQbitGSRZes"
+            footer: "O modelo tem uma precisão menor que a desejada. Link download modelo: http://0.0.0.0:8000/download/model",
+            link: env.BUILD_URL,
+            result: currentBuild.currentResult,
+            title: JOB_NAME,
+            webhookURL: "https://discord.com/api/webhooks/1207777679592394793/k0KTnD2qSX1N8-upTPvvNf3_RnDZ5fZdIhQtWSlU4zSvHrPFxmtP-SzjDeQbitGSRZes"
             sh 'python3 send-model-staging.py'
           }
         }
