@@ -5,7 +5,7 @@ from joblib import dump
 from sklearn import preprocessing
 import argparse
 
-from versioning import model, data
+from versioning import model, data, database
 
 # Load directory paths for persisting model
 
@@ -48,4 +48,13 @@ if __name__ == '__main__':
     args = parser.parse_args()
     metadata = {}
     data_version_hash = data.create_dataset_version(metadata, data_dir=args.data_used)
-    model_version_hash = model.create_model_version(metadata, model_dir=args.model_dir, data_used=data_version_hash, creator=args.creator, epochs=args.epochs, learning_rate=args.learning_rate, optimizer=args.optimizer)
+    previous_data_version_hash = database.retrieve_hash('data_version_hash', 'data_hash')
+    if data_version_hash is None:
+        print("Failed to generate data hash")
+        exit()
+    if data_version_hash == previous_data_version_hash:
+        model_version_hash = model.create_model_version(metadata, model_dir=args.model_dir, data_used=previous_data_version_hash, creator=args.creator, epochs=args.epochs, learning_rate=args.learning_rate, optimizer=args.optimizer)
+        save_hash = model.save_hash_on_file(model_version_hash)
+    else:
+        model_version_hash = model.create_model_version(metadata, model_dir=args.model_dir, data_used=data_version_hash, creator=args.creator, epochs=args.epochs, learning_rate=args.learning_rate, optimizer=args.optimizer)
+        save_hash = model.save_hash_on_file(model_version_hash)
