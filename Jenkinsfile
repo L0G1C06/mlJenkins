@@ -18,7 +18,6 @@ pipeline {
         sh 'python3 train-lda.py'
       }
     }
-
     stage('Docker Login') {
       steps {
         withCredentials(bindings: [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DockerHub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]) {
