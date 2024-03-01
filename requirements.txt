@@ -8,3 +8,4 @@ python-multipart
 fastapi
 uvicorn 
 tinydb
+pymongo
