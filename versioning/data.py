@@ -4,7 +4,7 @@ import json
 import hashlib 
 from datetime import datetime 
 
-from .database import retrieve_hash, insert_hash
+from .database import insert_data_versioning
 
 def calculate_dir_hash(dir_path):
     hash_object = hashlib.sha256()
@@ -22,12 +22,12 @@ def create_dataset_version(metadata, data_dir='./data/'):
     data_hash = calculate_dir_hash(data_dir)
     
     # Check if data hash already exists in the database
-    existing_data_hash = retrieve_hash('data_version_hash', 'data_hash')
-    if existing_data_hash == data_hash:
-        return existing_data_hash
+    #existing_data_hash = retrieve_hash('data_version_hash', 'data_hash')
+    #if existing_data_hash == data_hash:
+    #    return existing_data_hash
     
     # Save data hash to the database
-    insert_hash('data_version_hash', data_hash, 'data_hash')
+    #insert_hash('data_version_hash', data_hash, 'data_hash')
     
     # Create version directory if it doesn't exist
     version_dir = os.path.join('data_versioning', data_hash)
@@ -38,6 +38,7 @@ def create_dataset_version(metadata, data_dir='./data/'):
 
     # Add creation date and hyperparameters to metadata
     metadata['creation_date'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    insert_data_versioning(data_hash, 'Dataset Used: TO DO', metadata)
 
     # Save metadata to a JSON file
     with open(os.path.join(version_dir, 'metadata.json'), 'w') as metadata_file:

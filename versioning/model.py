@@ -5,6 +5,8 @@ import hashlib
 import subprocess
 from datetime import datetime 
 
+from .database import insert_model_versioning
+
 def calculate_directory_hash(directory_path):
     hash_object = hashlib.sha256()
     for root, dirs, files in os.walk(directory_path):
@@ -46,6 +48,8 @@ def create_model_version(metadata, model_dir = './my-model/', data_used = None, 
     # Save metadata to a JSON file
     with open(os.path.join(version_dir, 'metadata.json'), 'w') as metadata_file:
         json.dump(metadata, metadata_file, indent=2, separators=(',', ': '))
+
+    insert_model_versioning(model_hash, "Image: TO DO", metadata)
 
     return model_hash
 
