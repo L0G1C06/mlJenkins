@@ -4,3 +4,8 @@ __pycache__/
 .terraform/
 .terraform.lock.hcl
 terraform.tfstate
+data.db
+model.db
+data_versioning/
+model_versioning/
+data_hashes.json
