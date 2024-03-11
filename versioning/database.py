@@ -11,7 +11,7 @@ cur_model = conn_model.cursor()
 
 def create_data_versioning():
     cur_data.execute("""CREATE TABLE IF NOT EXISTS data_versioning (
-                id TEXT PRIMARY KEY,
+                id TEXT,
                 data TEXT,
                 metadata TEXT
     )""")
