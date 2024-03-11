@@ -4,9 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Versioning Table</title>
+    <script>
+        function downloadDirectory(id) {
+            window.location.href = "/download/data/" + id;  // Este é o endpoint que você deve criar em seu aplicativo FastAPI
+        }
+    </script>
 </head>
 <body>
     <h2>Data Versioning Table:</h2>
-    {{ data | safe }}
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Metadata</th>
+        </tr>
+        {% for record in data %}
+            <tr>
+                <td><a href="javascript:void(0);" onclick="downloadDirectory('{{ record['id'] }}')">{{ record['id'] }}</a></td>
+                <td>{{ record['metadata'] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
