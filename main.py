@@ -1,5 +1,6 @@
-from fastapi import FastAPI, UploadFile, File
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, UploadFile, File, Request
+from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.templating import Jinja2Templates
 import uvicorn 
 import pandas as pd 
 from sklearn import preprocessing
@@ -9,6 +10,7 @@ import io
 from versioning import database
 
 app = FastAPI()
+templates = Jinja2Templates(directory="htmlDir")
 
 def exec_inference(modelFile, testFile):
     data_test = pd.read_csv(testFile)
@@ -30,16 +32,25 @@ async def read_root():
 async def run_inference(testFile: UploadFile = File(...)):
     try:
         testContent = await testFile.read()
-        score = exec_inference(modelFile="/code/app/my-model/clf_lda.joblib", testFile=io.BytesIO(testContent))
+        score = exec_inference(modelFile="my-model/clf_lda.joblib", testFile=io.BytesIO(testContent))
         return JSONResponse(content={"message": f"Result: {score}%"}, status_code=200) 
     except Exception as e:
         return JSONResponse(content={"error": "Internal Server Error", "error": str(e)}, status_code=500)
     
 @app.get("/query/dataVersioning")
-async def query_data_versioning():
+async def query_data_versioning(request: Request):
     try:
         query = database.get_data_table()
-        return JSONResponse(content={"message": f"{query}"}, status_code=200)
+        return templates.TemplateResponse('dataVersioning.html', {'request': request, 'data': query.to_html()})
+        #return JSONResponse(content={"message": f"{query}"}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"error": "Internal Server Error", "error": str(e)}, status_code=500)
+    
+@app.get("/query/modelVersioning")
+async def query_model_versioning(request: Request):
+    try:
+        query = database.get_model_table()
+        return templates.TemplateResponse('modelVersioning.html', {'request': request, 'data': query.to_html()})
     except Exception as e:
         return JSONResponse(content={"error": "Internal Server Error", "error": str(e)}, status_code=500)
     
