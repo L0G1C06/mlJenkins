@@ -9,3 +9,5 @@ model.db
 data_versioning/
 model_versioning/
 data_hashes.json
+staging_models/
+model_hashes.txt

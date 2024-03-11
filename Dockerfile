@@ -1,13 +1,24 @@
 FROM python:3.8 
 
-WORKDIR /code 
+RUN mkdir my-model 
+RUN mkdir versioning
 
-COPY ./requirements.txt /code/requirements.txt 
+ENV MODEL_DIR=/my-model/
+ENV MODEL_FILE_LD=clf_lda.joblib
+ENV MODEL_FILE_NN=clf_nn.joblib 
 
-RUN pip install -r /code/requirements.txt 
+COPY requirements.txt ./requirements.txt 
+RUN pip install -r requirements.txt 
 
-COPY . /code/app
+COPY versioning/ ./versioning/
 
-EXPOSE 8001
+COPY /data/train.csv ./data/train.csv 
+COPY /data/test.csv ./data/test.csv
 
-CMD ["python3", "app/main.py"]
+COPY train-lda.py ./train-lda.py
+COPY train-nn.py ./train-nn.py
+COPY train-auto-nn.py ./train-auto-nn.py
+COPY test-lda.py ./test-lda.py
+
+RUN python3 train-lda.py
+RUN python3 test-lda.py
