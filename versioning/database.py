@@ -39,3 +39,8 @@ def insert_data_versioning(hash_id, dataset_used, metadata):
     cur_data.execute("INSERT INTO data_versioning VALUES (?, ?, ?)", (hash_id, dataset_used, metadata_json))
     conn_data.commit()
     #conn_data.close()
+
+def get_data_table():
+    with conn_data:
+        cur_data.execute("SELECT * FROM data_versioning")
+        return cur_data.fetchall()

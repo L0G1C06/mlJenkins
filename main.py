@@ -6,6 +6,8 @@ from sklearn import preprocessing
 from joblib import load 
 import io 
 
+from versioning import database
+
 app = FastAPI()
 
 def exec_inference(modelFile, testFile):
@@ -22,7 +24,7 @@ def exec_inference(modelFile, testFile):
 
 @app.get("/")
 async def read_root():
-    return {"message": "Inference is alive"}
+    return {"message": "I'm Alive!"}
 
 @app.post("/inference")
 async def run_inference(testFile: UploadFile = File(...)):
@@ -30,6 +32,14 @@ async def run_inference(testFile: UploadFile = File(...)):
         testContent = await testFile.read()
         score = exec_inference(modelFile="/code/app/my-model/clf_lda.joblib", testFile=io.BytesIO(testContent))
         return JSONResponse(content={"message": f"Result: {score}%"}, status_code=200) 
+    except Exception as e:
+        return JSONResponse(content={"error": "Internal Server Error", "error": str(e)}, status_code=500)
+    
+@app.get("/query/dataVersioning")
+async def query_data_versioning():
+    try:
+        query = database.get_data_table()
+        return JSONResponse(content={"message": f"{query}"}, status_code=200)
     except Exception as e:
         return JSONResponse(content={"error": "Internal Server Error", "error": str(e)}, status_code=500)
     
