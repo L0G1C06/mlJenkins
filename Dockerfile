@@ -28,6 +28,8 @@ COPY ./requirements.txt /code/requirements.txt
 
 RUN pip install -r /code/requirements.txt
 
+COPY ./main.py /code/main.py
+
 COPY . /code/
 
 EXPOSE 8001
