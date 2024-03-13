@@ -4,7 +4,7 @@ import json
 import hashlib 
 from datetime import datetime 
 
-from .database import insert_data_versioning
+from .database import insert_data_versioning, retrieve_hash
 
 def calculate_dir_hash(dir_path):
     hash_object = hashlib.sha256()
@@ -22,9 +22,9 @@ def create_dataset_version(metadata, data_dir='./data/'):
     data_hash = calculate_dir_hash(data_dir)
     
     # Check if data hash already exists in the database
-    #existing_data_hash = retrieve_hash('data_version_hash', 'data_hash')
-    #if existing_data_hash == data_hash:
-    #    return existing_data_hash
+    existing_data_hash = retrieve_hash('data_version_hash', 'data_hash')
+    if existing_data_hash == data_hash:
+        return existing_data_hash
     
     # Save data hash to the database
     #insert_hash('data_version_hash', data_hash, 'data_hash')
@@ -34,7 +34,11 @@ def create_dataset_version(metadata, data_dir='./data/'):
     os.makedirs(version_dir, exist_ok=True)
 
     # Copy model files to version directory
-    shutil.copytree(data_dir, os.path.join(version_dir, 'data'))
+    data_version_dir = os.path.join(version_dir, 'data')
+    if os.path.exists(data_version_dir):
+        print(f"Data directory '{data_version_dir}' already exists. Skipping data copying.")
+    else:
+        shutil.copytree(data_dir, os.path.join(version_dir, 'data'))
 
     # Add creation date and hyperparameters to metadata
     metadata['creation_date'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
