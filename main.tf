@@ -10,7 +10,7 @@ terraform {
 provider "docker" {}
 
 resource "docker_image" "mljenkins-inference"{
-    name = "l0g1g06/mljenkins-inference:latest"
+    name = "l0g1g06/mljenkins-inference:1.2"
     keep_locally = false 
 }
 
