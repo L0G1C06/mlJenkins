@@ -34,8 +34,8 @@ pipeline {
           def precision = sh(script: 'python3 test-lda.py', returnStdout: true).trim()
           def modelHash = sh(script: 'head -n 1 model_hashes.txt', returnStdout: true).trim()
           if (precision.toInteger() > 62) {
-            sh 'docker build -f Dockerfile . -t l0g1g06/mljenkins-inference:1.1'
-            sh 'docker push l0g1g06/mljenkins-inference:1.1'
+            sh 'docker build -f Dockerfile . -t l0g1g06/mljenkins-inference:1.2'
+            sh 'docker push l0g1g06/mljenkins-inference:1.2'
             sh 'tofu init'
             sh 'tofu plan'
             def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
