@@ -23,3 +23,18 @@ resource "docker_container" "mljenkins-inference"{
         external = 8001
     }
 }
+
+resource "docker_image" "mljenkins-staging"{
+  name = "l0g1g06/mljenkins-staging:latest"
+  keep_locally = false 
+}
+
+resource "docker_container" "mljenkins-staging"{
+  image = docker_image.mljenkins-inference.image_id
+  name = "model-staging"
+
+  ports {
+    internal = 8000
+    external = 8000
+  }
+}
