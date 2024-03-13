@@ -5,8 +5,8 @@ from tinydb import TinyDB, Query
 import pandas as pd 
 
 db = TinyDB('data_hashes.json')
-conn_data = sqlite3.connect("/versioning/data.db")
-conn_model = sqlite3.connect("/versioning/model.db")
+conn_data = sqlite3.connect("./versioning/data.db")
+conn_model = sqlite3.connect("./versioning/model.db")
 cur_data = conn_data.cursor()
 cur_model = conn_model.cursor()
 
@@ -42,9 +42,6 @@ def insert_data_versioning(hash_id, dataset_used, metadata):
     #conn_data.close()
 
 def get_data_table():
-    #with conn_data:
-        #cur_data.execute("SELECT * FROM data_versioning")
-        #return cur_data.fetchall()
     return pd.read_sql_query("SELECT * FROM data_versioning", conn_data)
 
 def get_model_table():
